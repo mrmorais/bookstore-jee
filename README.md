@@ -1,4 +1,4 @@
-## Java EE - Bookstore
+# Java EE - Bookstore
 
 This is a simple bookstore application created to prove understanding of Java EE 
 environments and concepts. It's proposed by IMD0409 course in 2019.1 semester. 
