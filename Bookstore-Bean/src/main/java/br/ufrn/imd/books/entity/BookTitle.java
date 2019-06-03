@@ -103,7 +103,7 @@ public class BookTitle {
   /**
    * @return book isbn
    */
-  public String isbn() {
+  public String getIsbn() {
     return this.isbn;
   }
 
