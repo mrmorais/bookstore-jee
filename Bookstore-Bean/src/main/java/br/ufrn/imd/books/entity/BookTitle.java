@@ -36,9 +36,14 @@ public class BookTitle {
   private String isbn;
 
   /**
-   * Book selling price
+   * Book sell price
    */
-  private Double price;
+  private Double sellPrice;
+
+  /**
+   * Book cost price
+   */
+  private Double costPrice;
 
   /**
    * Empty constructor
@@ -50,12 +55,13 @@ public class BookTitle {
    */
   public BookTitle(final long id, final String title
             , final String authorName, final String isbn
-            , final Double price) {
+            , final Double sellPrice, final Double costPrice) {
     this.id = id;
     this.title = title;
     this.authorName = authorName;
     this.isbn = isbn;
-    this.price = price;
+    this.sellPrice = sellPrice;
+    this.costPrice = costPrice;
   }
 
   /**
@@ -68,7 +74,7 @@ public class BookTitle {
   /**
    * @param id id to set
    */
-  public void setId(long id) {
+  public void setId(final long id) {
     this.id = id;
   }
 
@@ -82,7 +88,7 @@ public class BookTitle {
   /**
    * @param title title to set
    */
-  public void setTitle(String title) {
+  public void setTitle(final String title) {
     this.title = title;
   }
 
@@ -96,7 +102,7 @@ public class BookTitle {
   /**
    * @param authorName author name to set
    */
-  public void setAuthorName(String authorName) {
+  public void setAuthorName(final String authorName) {
     this.authorName = authorName;
   }
 
@@ -110,21 +116,35 @@ public class BookTitle {
   /**
    * @param isbn book isbn to set
    */
-  public void setIsbn(String isbn) {
+  public void setIsbn(final String isbn) {
     this.isbn = isbn;
   }
 
   /**
-   * @return book price
-   */
-  public Double getPrice() {
-    return this.price;
+    * @return book cost price
+    */
+  public Double getCostPrice() {
+    return this.costPrice;
   }
 
   /**
-   * @param price price to set
-   */
-  public void setPrice(Double price) {
-    this.price = price;
+    * @param price price to set
+    */
+  public void setCostPrice(final Double costPrice) {
+    this.costPrice = costPrice;
+  }
+
+  /**
+    * @return book sell price 
+    */
+  public Double getSellPrice() {
+    return this.sellPrice;
+  }
+
+  /**
+    * @param price price to set
+    */
+  public void setSellPrice(final Double sellPrice) {
+    this.sellPrice = sellPrice;
   }
 }

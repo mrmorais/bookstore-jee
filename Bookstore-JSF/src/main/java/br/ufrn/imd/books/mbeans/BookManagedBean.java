@@ -10,7 +10,8 @@ public class BookManagedBean {
     private String title;
     private String authorName;
     private String isbn;
-    private Double price;
+    private Double sellPrice;
+    private Double costPrice;
 
     public BookManagedBean() {}
 
@@ -24,7 +25,7 @@ public class BookManagedBean {
     /**
      * @param title title to set
      */
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
       this.title = title;
     }
 
@@ -38,7 +39,7 @@ public class BookManagedBean {
     /**
      * @param authorName author name to set
      */
-    public void setAuthorName(String authorName) {
+    public void setAuthorName(final String authorName) {
       this.authorName = authorName;
     }
 
@@ -52,21 +53,35 @@ public class BookManagedBean {
     /**
      * @param isbn book isbn to set
      */
-    public void setIsbn(String isbn) {
+    public void setIsbn(final String isbn) {
       this.isbn = isbn;
     }
 
     /**
-     * @return book price
+     * @return book cost price
      */
-    public Double getPrice() {
-      return this.price;
+    public Double getCostPrice() {
+      return this.costPrice;
     }
 
     /**
      * @param price price to set
      */
-    public void setPrice(Double price) {
-      this.price = price;
+    public void setCostPrice(final Double costPrice) {
+      this.costPrice = costPrice;
+    }
+
+    /**
+     * @return book sell price 
+     */
+    public Double getSellPrice() {
+      return this.sellPrice;
+    }
+
+    /**
+     * @param price price to set
+     */
+    public void setSellPrice(final Double sellPrice) {
+      this.sellPrice = sellPrice;
     }
 }
