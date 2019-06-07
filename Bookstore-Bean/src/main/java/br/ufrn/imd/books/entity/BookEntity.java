@@ -6,10 +6,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
+import java.io.Serializable;
 
-@Entity
-@NamedQuery(name= "findAllBooks", query="SELECT e FROM BookTitle e")
-public class BookTitle {
+@Entity(name="Book")
+@NamedQuery(name= "findAllBooks", query="SELECT e FROM Book e")
+public class BookEntity implements Serializable {
+
+  private static final long serialVersionUID = 7406410984594764224L;
+
   private static final String SEQ_BOOK = "SEQ_BOOK";
 
   /**
@@ -48,15 +52,14 @@ public class BookTitle {
   /**
    * Empty constructor
    */
-  public BookTitle() {}
+  public BookEntity() {}
 
   /**
    * Constructor
    */
-  public BookTitle(final long id, final String title
+  public BookEntity(final String title
             , final String authorName, final String isbn
             , final Double sellPrice, final Double costPrice) {
-    this.id = id;
     this.title = title;
     this.authorName = authorName;
     this.isbn = isbn;
