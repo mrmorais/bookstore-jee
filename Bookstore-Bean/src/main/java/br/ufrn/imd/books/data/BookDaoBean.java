@@ -1,8 +1,11 @@
 package br.ufrn.imd.books.data;
 
+import java.util.List;
+
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import br.ufrn.imd.books.entity.BookEntity;
 import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
@@ -16,9 +19,19 @@ public class BookDaoBean implements BookDao {
   public BookEntity addNew(BookEntity bookTitle) throws BookstoreUnknownException {
     try {
       entityManager.persist(bookTitle);
+      return bookTitle;
     } catch (Exception e) {
       throw new BookstoreUnknownException();
     }
-    return bookTitle;
+  }
+
+  @Override
+  public List<BookEntity> getAll() throws BookstoreUnknownException {
+    try {
+      TypedQuery<BookEntity> query = entityManager.createNamedQuery("getAllBooks", BookEntity.class);
+      return query.getResultList();
+    } catch (Exception e){
+      throw new BookstoreUnknownException();
+    }
   }
 }

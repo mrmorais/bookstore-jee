@@ -1,5 +1,7 @@
 package br.ufrn.imd.books.beans.book;
 
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -19,5 +21,10 @@ public class BookEJB implements BookRemoteEJB, BookLocalEJB {
   @Override
   public BookEntity createNew(BookEntity book) throws BookstoreUnknownException {
     return bookDAO.addNew(book);
+  }
+
+  @Override
+  public List<BookEntity> getAll() throws BookstoreUnknownException {
+    return bookDAO.getAll();
   }
 }

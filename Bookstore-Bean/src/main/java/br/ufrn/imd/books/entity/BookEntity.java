@@ -10,11 +10,9 @@ import javax.persistence.SequenceGenerator;
 import br.ufrn.imd.books.exceptions.BookstoreValidationException;
 
 import java.io.Serializable;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Entity(name="book")
-@NamedQuery(name= "findAllBooks", query="SELECT e FROM book e")
+@NamedQuery(name= "getAllBooks", query="SELECT e FROM book e")
 public class BookEntity implements Serializable {
 
   private static final long serialVersionUID = 7406410984594764224L;

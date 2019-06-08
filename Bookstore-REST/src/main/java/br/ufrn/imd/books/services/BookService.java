@@ -1,8 +1,11 @@
 package br.ufrn.imd.books.services;
 
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -24,7 +27,7 @@ public class BookService {
 	@Path("/create")
 	@Produces("application/json; charset=UTF-8")
 	@Consumes("application/x-www-form-urlencoded; charset=UTF-8")
-	public Response sayHello(
+	public Response create(
 		@FormParam("title") final String title_
 		, @FormParam("authorName") final String authorName_
 		, @FormParam("isbn") final String isbn_
@@ -42,6 +45,19 @@ public class BookService {
 		} catch(BookstoreUnknownException unknownErr) {
 			// Unknown or undefined server error
 			return Response.status(500).entity(new ExceptionWrapper(unknownErr)).build();
+		}
+	}
+
+	@GET
+	@Path("/all")
+	@Produces("application/json; charset=UTF-8")
+	public Response getAll() {
+		try {
+			List<BookEntity> allBooks = bookEJB.getAll();
+			return Response.ok(allBooks).build();
+		} catch(BookstoreUnknownException unknownException) {
+			// Unknown or undefined server error
+			return Response.status(500).entity(new ExceptionWrapper(unknownException)).build();
 		}
 	}
 
