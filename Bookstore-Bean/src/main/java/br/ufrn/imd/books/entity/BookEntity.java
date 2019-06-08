@@ -12,7 +12,7 @@ import br.ufrn.imd.books.exceptions.BookstoreValidationException;
 import java.io.Serializable;
 
 @Entity(name="book")
-@NamedQuery(name= "getAllBooks", query="SELECT e FROM book e")
+@NamedQuery(name= "getAllBooks", query="SELECT b FROM book b")
 public class BookEntity implements Serializable {
 
   private static final long serialVersionUID = 7406410984594764224L;
@@ -73,6 +73,10 @@ public class BookEntity implements Serializable {
     this.validateFields();
   }
 
+  /**
+   * Fields validation
+   * @throws BookstoreValidationException
+   */
   public void validateFields() throws BookstoreValidationException {
     if (this.title == null || this.title.isEmpty()) {
       throw new BookstoreValidationException("Informe o título do livro");
