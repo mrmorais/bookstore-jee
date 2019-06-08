@@ -6,10 +6,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
-import java.io.Serializable;
 
-@Entity(name="Book")
-@NamedQuery(name= "findAllBooks", query="SELECT e FROM Book e")
+import br.ufrn.imd.books.exceptions.BookstoreValidationException;
+
+import java.io.Serializable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+@Entity(name="book")
+@NamedQuery(name= "findAllBooks", query="SELECT e FROM book e")
 public class BookEntity implements Serializable {
 
   private static final long serialVersionUID = 7406410984594764224L;
@@ -59,12 +64,37 @@ public class BookEntity implements Serializable {
    */
   public BookEntity(final String title
             , final String authorName, final String isbn
-            , final Double sellPrice, final Double costPrice) {
+            , final Double sellPrice, final Double costPrice)
+            throws BookstoreValidationException {
     this.title = title;
     this.authorName = authorName;
     this.isbn = isbn;
     this.sellPrice = sellPrice;
     this.costPrice = costPrice;
+
+    this.validateFields();
+  }
+
+  public void validateFields() throws BookstoreValidationException {
+    if (this.title == null || this.title.isEmpty()) {
+      throw new BookstoreValidationException("Informe o título do livro");
+    }
+
+    if (this.authorName == null || this.authorName.isEmpty()) {
+      throw new BookstoreValidationException("Informe o nome do autor");
+    }
+
+    if (this.isbn == null || this.isbn.isEmpty()) {
+      throw new BookstoreValidationException("Informe o ISBN");
+    }
+
+    if (this.costPrice == null) {
+      throw new BookstoreValidationException("Informe o preço de custo");
+    }
+
+    if (this.sellPrice == null) {
+      throw new BookstoreValidationException("Informe o preço de venda");
+    }
   }
 
   /**

@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import br.ufrn.imd.books.entity.BookEntity;
+import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
 
 @Stateful
 public class BookDaoBean implements BookDao {
@@ -12,12 +13,11 @@ public class BookDaoBean implements BookDao {
   @PersistenceContext(unitName = "BookstorePU")
   private EntityManager entityManager;
 
-  public BookEntity addNew(BookEntity bookTitle) {
-    System.out.println(bookTitle.getTitle());
+  public BookEntity addNew(BookEntity bookTitle) throws BookstoreUnknownException {
     try {
       entityManager.persist(bookTitle);
     } catch (Exception e) {
-      e.printStackTrace();
+      throw new BookstoreUnknownException();
     }
     return bookTitle;
   }
