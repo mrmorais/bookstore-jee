@@ -2,12 +2,15 @@ package br.ufrn.imd.books.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
 /**
@@ -33,6 +36,9 @@ public class OrderEntity implements Serializable {
    * Order creation date
    */
   private Date createdAt;
+
+  @OneToMany(mappedBy="order", cascade=CascadeType.ALL, targetEntity=OrderItemEntity.class)
+  private List<OrderItemEntity> items;
 
   /**
    * Empty constructor
@@ -72,5 +78,20 @@ public class OrderEntity implements Serializable {
    */
   public void setCreatedAt(final Date createdAt) {
     this.createdAt = createdAt;
+  }
+
+  /**
+   * @return order items
+   */
+  public List<OrderItemEntity> getItems() {
+    return this.items;
+  }
+
+  /**
+   * @param items items to set
+   */
+  public void setItems(List<OrderItemEntity> items) {
+    this.items = items;
+    this.items.forEach(x -> x.setOrder(this)); 
   }
 }

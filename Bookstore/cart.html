@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Carrinho - Bookstore</title>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.7.0/qs.js"></script>
+</head>
+<body>
+  <a href="index.html">Home</a> > Carrinho<br/>
+  <div id="section-search-book">
+    <h2>Buscar livro</h2>
+    <form id="search-book-form">
+      ID: <input id="search-book-id" type="text" /><input type="submit" value="Carrega livro" />
+    </form>
+  </div>
+  <div id="section-add-book">
+    <h3>Livro encontrado</h3>
+    <strong>Portalda esperança</strong><br/>
+    João das neves<br/>
+    ISBN 18984 24654 4324
+    <form id="add-book-form">
+      Quantidade: <input id="add-book-quantity"><input type="submit" value="Adicionar" />
+    </form>
+  </div>
+  <div id="section-list-order">
+    <h2>Livros no carrinho</h2>
+    <table id="order-table" border=1>
+      <tr>
+        <th>ID</th>
+        <th>Título</th>
+        <th>Autor</th>
+        <th>Quantidade</th>
+        <th>Valor</th>
+      </tr>
+    </table>
+    <h3>Valor total: R$ 1561</h3>
+    <button>Finalizar compra</button>
+  </div>
+  <script>
+
+  </script>
+</body>
+</html>
