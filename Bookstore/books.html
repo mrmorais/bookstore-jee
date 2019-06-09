@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Livros - Bookstore</title>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.7.0/qs.js"></script>
+</head>
+<body>
+  <a href="index.html">Home</a> > Livros<br/>
+  <div id="section-new-books">
+    <h2>Criar novo livro</h2>
+    <form id="new-book-form">
+      Título: <input id="new-book-title" type="text" /> Autor: <input id="new-book-author" type="text"/>      ISBN: <input id="new-book-isbn" type="text" /> <br/>
+      Preço de compra: <input id="new-book-cost-price" /> Preço de venda: <input id="new-book-sell-price" /><br/><br/>
+      <input type="submit" />
+    </form>
+  </div>
+  <div id="section-list-books">
+    <h2>Todos os livros</h2>
+    <table id="books-table" border=1>
+      <tr>
+        <th>ID</th>
+        <th>Título</th>
+        <th>Autor</th>
+        <th>ISBN</th>
+        <th>Preço de compra</th>
+        <th>Preço de venda</th>
+      </tr>
+    </table>
+  </div>
+  <script>
+
+    function bookItem(book) {
+      return `
+      <tr class="book-item">
+        <td>${book.id}</td>
+        <td>${book.title}</td>
+        <td>${book.authorName}</td>
+        <td>${book.isbn}</td>
+        <td>${book.costPrice}</td>
+        <td>${book.sellPrice}</td>
+      </tr>`;
+    }
+
+    function clearBooks() {
+      $(".book-item").remove();
+    }
+
+    function renderBooks(booksData) {
+      clearBooks();
+      booksData.forEach(book => {
+        $("#books-table").append(bookItem(book))
+      });
+    }
+
+    function fetchBooks(books) {
+      axios.get('http://localhost:8080/api/v1/book/all')
+        .then(function(books) {
+          if (books.status == 200) {
+            renderBooks(books.data);
+          } else {
+            alert(books.data.message);
+          }
+        });
+    }
+
+    $("#new-book-form").submit(function(event) {
+      event.preventDefault();
+
+      var title  = $("#new-book-title").val();
+      var author = $("#new-book-author").val();
+      var isbn = $("#new-book-isbn").val();
+      var costPrice = $("#new-book-cost-price").val();
+      var sellPrice = $("#new-book-sell-price").val();
+
+      axios.post("http://localhost:8080/api/v1/book/create", 
+        Qs.stringify({
+          title: title,
+          authorName: author,
+          isbn: isbn,
+          costPrice: costPrice,
+          sellPrice: sellPrice
+        }), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+      .then(function(response) {
+        fetchBooks();
+      }).catch(alert)
+    });
+
+    $(function() {
+      fetchBooks();
+    })
+  </script>
+</body>
+</html>
