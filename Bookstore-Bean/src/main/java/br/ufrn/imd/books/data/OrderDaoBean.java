@@ -19,7 +19,6 @@ public class OrderDaoBean implements OrderDao {
   public OrderEntity addNew(OrderEntity order) throws BookstoreUnknownException {
     try {
       entityManager.persist(order);
-      order.getItems().forEach(item -> entityManager.persist(item));
       return order;
     } catch (Exception e) {
       throw new BookstoreUnknownException();

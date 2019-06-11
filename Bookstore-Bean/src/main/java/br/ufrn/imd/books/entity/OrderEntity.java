@@ -1,6 +1,7 @@
 package br.ufrn.imd.books.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,9 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 
 /**
  * OrderEntity
@@ -22,14 +23,11 @@ public class OrderEntity implements Serializable {
   
   private static final long serialVersionUID = -3988471087764836884L;
 
-  private static final String SEQ_ORDER = "SEQ_ORDER";
-
   /**
    * Primary key
    */
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_ORDER)
-  @SequenceGenerator(name = SEQ_ORDER, sequenceName="seq_order", allocationSize = 1)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
   /**
@@ -37,19 +35,23 @@ public class OrderEntity implements Serializable {
    */
   private Date createdAt;
 
-  @OneToMany(mappedBy="order", cascade=CascadeType.ALL, targetEntity=OrderItemEntity.class)
+  @OneToMany(cascade=CascadeType.ALL, orphanRemoval= true)
+  @JoinColumn(name="book_order_id")
   private List<OrderItemEntity> items;
 
   /**
    * Empty constructor
    */
-  public OrderEntity() {}
+  public OrderEntity() {
+    this.items = new ArrayList<OrderItemEntity>();
+  }
 
   /**
    * Constructor
    */
   public OrderEntity(final Date createdAt) {
     this.createdAt = createdAt;
+    this.items = new ArrayList<OrderItemEntity>();
   }
 
   /**
@@ -92,6 +94,5 @@ public class OrderEntity implements Serializable {
    */
   public void setItems(List<OrderItemEntity> items) {
     this.items = items;
-    this.items.forEach(x -> x.setOrder(this)); 
   }
 }
