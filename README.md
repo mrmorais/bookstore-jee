@@ -49,3 +49,21 @@ To run a task press `Ctrl + P` and type the name above listed, or just task to s
 
 > Note: The WildFly container is a modified image of the official one, I called it Booksfly.
 It imports JDBC jar file and creates a datasource connecting to the also conteinerized PostgreSQL instance.
+
+## Troubleshooting
+
+**The code is not been updated on Wildfly container**
+
+If somehow you identified that your code is not going successfully to the container, but you got a BUILD SUCCESS message you can solve it by running:
+
+```
+mvn -f Bookstore-* clean wildfly:deploy
+```
+
+**The JNDI got messy**
+
+In that situation try undeploy and deploy it again with the clean command. If still not worked try restart the server (through 9990 HAL console).
+
+**JPA did not created the database correctly**
+
+Try redeploy the Bookstore-EJB project. Before it, try remove and create again the public schema (via 8081 pgAdmin).
