@@ -1,13 +1,20 @@
 # Java EE - Bookstore
 
-This is a simple bookstore application created to prove understanding of Java EE 
-environments and concepts. It's proposed by IMD0409 course in 2019.1 semester. 
+This is a simple bookstore application created to prove understanding of Java EE environments and concepts. It's a project proposed by IMD0409 course in 2019.1 semester.
+
+## Subprojects
+
+**`Bookstore-Bean`** is a Java EE project which contains EJBs to deal with business domain (Domain classes, Data Acces Objects and EJB endpoints). It persists data using Hibernate and PostgreSQL. It's powered by Wildfly.
+
+**`Bookstore-REST`** is a JAX-RS web project that serves a REST service to consume Bookstore-Bean endpoints. It uses JSON on data transfer layer with web.
+
+**`Bookstore`** is a simple HTML project that uses Axios and jQuery to consume Bookstore-REST endpoints.
 
 ## Development Environment
 
-It uses a Docker powered database (PostgreSQL), pgAdmin and container server (Wildfly).
-Make sure you have docker and docker-compose. Note: that environment doesn't deploys 
-the application by default. Services provided:
+You can use a Docker powered database (PostgreSQL), pgAdmin and container server (Wildfly) on development environment. Make sure you have docker and docker-compose. Note: that environment doesn't deploys the application.
+
+Provided services:
 
 - Wildfly 16
   - 8080: http services
@@ -29,9 +36,7 @@ I strongly recommend you to use VSCode as your "IDE", is insteresting to have th
 following extensions to work well with JEE environment:
 
 - Docker (by Microsoft)
-- Java Dependency Viewer (by Microsoft)
 - Java Extension Pack (by Microsoft)
-- Maven for Java (by Microsoft)
 - [Language Support for Java](https://github.com/redhat-developer/vscode-java) (by Red Hat) you have to install this one manually
 
 When hit "Open Folder" on VSCode pick `bookstore-jee`. After modifications, or just to try, 
