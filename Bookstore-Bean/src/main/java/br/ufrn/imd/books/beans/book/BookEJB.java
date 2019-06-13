@@ -20,7 +20,7 @@ public class BookEJB implements BookRemoteEJB, BookLocalEJB {
 
   @Override
   public BookEntity createNew(BookEntity book) throws BookstoreUnknownException {
-    return bookDAO.addNew(book);
+    return bookDAO.persist(book);
   }
 
   @Override

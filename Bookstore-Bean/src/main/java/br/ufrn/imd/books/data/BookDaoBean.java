@@ -16,7 +16,7 @@ public class BookDaoBean implements BookDao {
   @PersistenceContext(unitName = "BookstorePU")
   private EntityManager entityManager;
 
-  public BookEntity addNew(BookEntity bookTitle) throws BookstoreUnknownException {
+  public BookEntity persist(BookEntity bookTitle) throws BookstoreUnknownException {
     try {
       entityManager.persist(bookTitle);
       return bookTitle;
@@ -32,6 +32,15 @@ public class BookDaoBean implements BookDao {
       return query.getResultList();
     } catch (Exception e){
       throw new BookstoreUnknownException();
+    }
+  }
+
+  @Override
+  public BookEntity findBook(Long bookId) throws BookstoreUnknownException {
+    try {
+      return entityManager.find(BookEntity.class, bookId);
+    } catch (Exception e){
+      throw new BookstoreUnknownException("Livro não localizado.");
     }
   }
 }

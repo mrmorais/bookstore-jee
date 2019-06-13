@@ -6,6 +6,10 @@ package br.ufrn.imd.books.exceptions;
 public class BookstoreUnknownException extends Exception {
   private static final long serialVersionUID = -4749434144904730669L;
 
+  public BookstoreUnknownException(String message) {
+    super(message);
+  }
+
   public BookstoreUnknownException() {
     super("Um erro não identificado ocorreu");
   }

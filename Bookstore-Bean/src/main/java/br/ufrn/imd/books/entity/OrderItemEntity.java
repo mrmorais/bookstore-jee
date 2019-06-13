@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  * OrderItemEntity
@@ -21,11 +22,10 @@ public class OrderItemEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  private String valor;
-  
-  // @ManyToOne
-  // @JoinColumn(name="book_order_id")
-  // private OrderEntity order;
+  @ManyToOne
+  private BookEntity book;
+
+  private int quantity;
 
   /**
    * Empty constructor
@@ -33,8 +33,9 @@ public class OrderItemEntity implements Serializable {
   public OrderItemEntity() {
   }
 
-  public OrderItemEntity(final String valor) {
-    this.valor = valor;
+  public OrderItemEntity(final BookEntity book, final int quantity) {
+    this.book = book;
+    this.quantity = quantity;
   }
 
   public long getId() {
@@ -45,20 +46,20 @@ public class OrderItemEntity implements Serializable {
     this.id = id;
   }
 
-  public String getValor() {
-    return this.valor;
+  public int getQuantity() {
+    return this.quantity;
   }
 
-  public void setValor(String valor) {
-    this.valor = valor;
+  public void setQuantity(int quantity) {
+    this.quantity = quantity;
   }
 
-  // public OrderEntity getOrder() {
-  //   return this.order;
-  // }
+  public BookEntity getBook() {
+    return this.book;
+  }
 
-  // public void setOrder(OrderEntity order_) {
-  //   this.order = order_;
-  // }
+  public void setBook(BookEntity book) {
+    this.book = book;
+  }
 
 }

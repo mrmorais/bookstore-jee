@@ -6,6 +6,7 @@ import br.ufrn.imd.books.entity.BookEntity;
 import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
 
 public interface BookDao {
-  public BookEntity addNew(BookEntity bookTitle) throws BookstoreUnknownException;
+  public BookEntity persist(BookEntity bookTitle) throws BookstoreUnknownException;
+  public BookEntity findBook(Long bookId) throws BookstoreUnknownException;
   public List<BookEntity> getAll() throws BookstoreUnknownException;
 }
