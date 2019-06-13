@@ -22,8 +22,6 @@ public class OrderEJB implements OrderRemoteEJB, OrderLocalEJB {
   @Override
   public OrderEntity createNew(OrderEntity order) throws BookstoreUnknownException {
     ArrayList<OrderItemEntity> items = new ArrayList<OrderItemEntity>();
-    items.add(new OrderItemEntity());
-    items.add(new OrderItemEntity());
     order.setItems(items);
     return orderDAO.addNew(order);
   }
