@@ -13,7 +13,6 @@ import javax.ws.rs.core.Response;
 
 import br.ufrn.imd.books.beans.order.OrderLocalEJB;
 import br.ufrn.imd.books.entity.OrderEntity;
-import br.ufrn.imd.books.entity.OrderItemEntity;
 import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
 import br.ufrn.imd.books.utils.ExceptionWrapper;
 
