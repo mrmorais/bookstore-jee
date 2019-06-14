@@ -2,8 +2,20 @@ package br.ufrn.imd.books.beans.order;
 
 import java.util.ArrayList;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSContext;
+import javax.jms.JMSDestinationDefinition;
+import javax.jms.JMSDestinationDefinitions;
+import javax.jms.Message;
+import javax.jms.MessageProducer;
+import javax.jms.Queue;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.Session;
 
 import br.ufrn.imd.books.data.BookDao;
 import br.ufrn.imd.books.data.IntentDao;
@@ -20,17 +32,32 @@ import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
  * 
  * @author Maradona Morais
  */
+// @JMSDestinationDefinitions(
+//   value={
+//     @JMSDestinationDefinition(
+//         name = "java:/queue/DEMAND_QUEUE",
+//         interfaceName = "javax.jms.Queue",
+//         destinationName = "demandQueue"
+//     ),
+//   }
+// )
 @Stateless(name = "OrderEJB")
 public class OrderEJB implements OrderRemoteEJB, OrderLocalEJB {
 
   @EJB
-  OrderDao orderDAO;
+  private OrderDao orderDAO;
 
   @EJB
-  BookDao bookDAO;
+  private BookDao bookDAO;
 
   @EJB
-  IntentDao intentDAO;
+  private IntentDao intentDAO;
+
+  // @Resource(lookup = "java:/queue/DEMAND_QUEUE")
+  // private QueueConnectionFactory connectionFactory;
+
+  // @Resource(lookup = "java:/queue/DEMAND_QUEUE")
+  // private Queue demandQueue;
 
   /**
    * Creates a new empty book order
@@ -78,10 +105,24 @@ public class OrderEJB implements OrderRemoteEJB, OrderLocalEJB {
     }
 
     IntentEntity intent = new IntentEntity(order, intentType);
-
     intentDAO.persist(intent);
-
     order.setIntent(intent);
+
+    // After created the intent goes to "intentQueue" to
+    // be processed by DemandManagerMDB
+    // try {
+    //   Connection connection = connectionFactory.createConnection();
+    //   Session session = connection.createSession(true, 0);
+
+    //   MessageProducer producer = session.createProducer(demandQueue);
+    //   Message msg = session.createMessage();
+    //   msg.setLongProperty("intentId", intent.getId());
+    //   producer.send(msg);
+
+    //   connection.close();
+    // } catch(Exception e) {
+    //   throw new BookstoreUnknownException("Erro ao registrar intent");
+    // }
 
     return order;
   }
