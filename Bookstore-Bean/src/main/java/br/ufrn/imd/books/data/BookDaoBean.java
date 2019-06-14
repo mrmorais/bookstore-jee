@@ -2,7 +2,7 @@ package br.ufrn.imd.books.data;
 
 import java.util.List;
 
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -10,7 +10,7 @@ import javax.persistence.TypedQuery;
 import br.ufrn.imd.books.entity.BookEntity;
 import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
 
-@Stateful
+@Stateless
 public class BookDaoBean implements BookDao {
 
   @PersistenceContext(unitName = "BookstorePU")

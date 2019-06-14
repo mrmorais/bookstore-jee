@@ -14,6 +14,7 @@ import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
 
 /**
  * OrderEJB
+ * @author Maradona Morais
  */
 @Stateless(name = "OrderEJB")
 public class OrderEJB implements OrderRemoteEJB, OrderLocalEJB {
@@ -24,6 +25,11 @@ public class OrderEJB implements OrderRemoteEJB, OrderLocalEJB {
   @EJB
   BookDao bookDAO;
 
+  /**
+   * Creates a new empty book order
+   * @param order order to be created
+   * @return persisted order
+   */
   @Override
   public OrderEntity createNew(OrderEntity order) throws BookstoreUnknownException {
     ArrayList<OrderItemEntity> items = new ArrayList<OrderItemEntity>();
@@ -31,6 +37,13 @@ public class OrderEJB implements OrderRemoteEJB, OrderLocalEJB {
     return orderDAO.persist(order);
   }
 
+  /**
+   * Create a new item and attach it to a existing book order
+   * @param orderId order id
+   * @param bookId book id
+   * @param quantity number of titles
+   * @return the updated book order
+   */
   @Override
   public OrderEntity addItem(final Long orderId, final Long bookId, final int quantity) throws BookstoreUnknownException {
     OrderEntity order = orderDAO.findOrder(orderId);

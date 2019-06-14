@@ -17,12 +17,25 @@ import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
 import br.ufrn.imd.books.exceptions.BookstoreValidationException;
 import br.ufrn.imd.books.utils.ExceptionWrapper;
 
+/**
+ * BookService
+ * @author Maradona Morais
+ */
 @Path("/book")
 public class BookService {
 
   @EJB
   BookLocalEJB bookEJB;
 
+	/**
+	 * Create a new book
+	 * @param title_ book title
+	 * @param authorName_ book's author name
+	 * @param isbn_ book isbn code
+	 * @param sellPrice_ book sell price
+	 * @param costPrice_ book cost price
+	 * @return created book
+	 */
 	@POST
 	@Path("/create")
 	@Produces("application/json; charset=UTF-8")
@@ -48,6 +61,10 @@ public class BookService {
 		}
 	}
 
+	/**
+	 * Returns all books
+	 * @return list containing all existing books
+	 */
 	@GET
 	@Path("/all")
 	@Produces("application/json; charset=UTF-8")

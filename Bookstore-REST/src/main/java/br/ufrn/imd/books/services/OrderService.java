@@ -18,6 +18,7 @@ import br.ufrn.imd.books.utils.ExceptionWrapper;
 
 /**
  * OrderService
+ * @author Maradona Morais
  */
 @Path("/order")
 public class OrderService {
@@ -25,6 +26,10 @@ public class OrderService {
   @EJB
   OrderLocalEJB orderEJB;
 
+  /**
+   * Creates a new empty book order
+   * @return created book order
+   */
   @Path("/create")
   @POST
   @Produces("application/json; charset=UTF-8")
@@ -43,6 +48,13 @@ public class OrderService {
 
   }
 
+  /**
+   * Add item to a existing book order
+   * @param id book order id
+   * @param bookId book id
+   * @param quantity quantity of titles
+   * @return updated book order
+   */
   @Path("/{id}/add")
   @POST
   @Produces("application/json; charset=UTF-8")
