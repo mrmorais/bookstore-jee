@@ -7,12 +7,14 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  * OrderEntity
@@ -23,36 +25,33 @@ public class OrderEntity implements Serializable {
   
   private static final long serialVersionUID = -3988471087764836884L;
 
-  /**
-   * Primary key
-   */
+  /** Primary key */
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  /**
-   * Order creation date
-   */
+  /** Order creation date */
   private Date createdAt;
 
-  @OneToMany(cascade=CascadeType.ALL, orphanRemoval= true)
+  @OneToMany(cascade=CascadeType.ALL, orphanRemoval= true, fetch=FetchType.EAGER)
   @JoinColumn(name="book_order_id")
   private List<OrderItemEntity> items;
 
-  /**
-   * Empty constructor
-   */
+  @OneToOne(mappedBy="order")
+  private IntentEntity intent;
+
+  /** Empty constructor */
   public OrderEntity() {
     this.items = new ArrayList<OrderItemEntity>();
   }
 
-  /**
-   * Constructor
-   */
+  /** Constructor */
   public OrderEntity(final Date createdAt) {
     this.createdAt = createdAt;
     this.items = new ArrayList<OrderItemEntity>();
   }
+
+  // @@@@ POJO methods @@@@
 
   /**
    * @return order id
@@ -95,4 +94,12 @@ public class OrderEntity implements Serializable {
   public void setItems(List<OrderItemEntity> items) {
     this.items = items;
   }
+
+  public IntentEntity getIntent() {
+    return this.intent;
+  }
+
+  public void setIntent(IntentEntity intent) {
+    this.intent = intent;
+  } 
 }

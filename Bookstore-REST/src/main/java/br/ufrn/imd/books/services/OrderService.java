@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -13,6 +14,7 @@ import javax.ws.rs.core.Response;
 
 import br.ufrn.imd.books.beans.order.OrderLocalEJB;
 import br.ufrn.imd.books.entity.OrderEntity;
+import br.ufrn.imd.books.entity.IntentEntity.IntentType;
 import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
 import br.ufrn.imd.books.utils.ExceptionWrapper;
 
@@ -44,8 +46,15 @@ public class OrderService {
   }
 
   @Path("/{id}")
-  public void get(final @PathParam("id") int id) {
-
+  @GET
+  @Produces("application/json; charset=UTF-8")
+  public Response get(final @PathParam("id") Long id) {
+    try {
+      OrderEntity obj = orderEJB.findOrder(id);
+      return Response.ok(obj).build();
+    } catch(BookstoreUnknownException exception) {
+      return Response.status(500).entity(new ExceptionWrapper(exception)).build();
+    }
   }
 
   /**
@@ -70,8 +79,42 @@ public class OrderService {
       }
   }
 
+  /**
+   * Checksout a order, generating a service Intent
+   * @param id order id
+   * @param type intent type
+   * @return the updated order
+   */
   @Path("/{id}/checkout")
-  public void checkout(final @PathParam("id") int id, final @FormParam("type") String type) {
+  @POST
+  @Produces("application/json; charset=UTF-8")
+  @Consumes("application/x-www-form-urlencoded; charset=UTF-8")
+  public Response checkout(final @PathParam("id") Long id, final @FormParam("type") String type) {
+    try {
+      IntentType intentType;
+      switch(type) {
+        case "reservation":
+          intentType = IntentType.RESERVATION;
+          break;
+        case "transaction":
+          intentType = IntentType.TRANSACTION;
+          break;
+        default:
+          intentType = null;
+      }
 
+      if (intentType == null) {
+        // This means an unknow intent type. Returns a Bad Request error
+        return Response.status(400).entity(new ExceptionWrapper(
+          new Exception("O tipo de Intent inserido não foi reconhecido como válido.")
+        )).build();
+      }
+
+      OrderEntity obj = orderEJB.checkout(id, intentType);
+
+      return Response.ok(obj).build();
+    } catch(BookstoreUnknownException unknownException) {
+      return Response.status(500).entity(new ExceptionWrapper(unknownException)).build();
+    }
   }
 }

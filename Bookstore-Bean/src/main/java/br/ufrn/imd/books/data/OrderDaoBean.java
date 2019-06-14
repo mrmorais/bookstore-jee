@@ -29,9 +29,13 @@ public class OrderDaoBean implements OrderDao {
   @Override
   public OrderEntity findOrder(Long orderId) throws BookstoreUnknownException {
     try {
-      return entityManager.find(OrderEntity.class, orderId);
+      OrderEntity order = entityManager.find(OrderEntity.class, orderId);
+      if (order == null) {
+        throw new BookstoreUnknownException("Não foi possível localizar a ordem");
+      }
+      return order;
     } catch(Exception e) {
-      throw new BookstoreUnknownException("Não foi possível localizar a ordem");
+      throw new BookstoreUnknownException();
     }
   }
 
