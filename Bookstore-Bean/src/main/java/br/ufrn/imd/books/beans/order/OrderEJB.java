@@ -57,6 +57,11 @@ public class OrderEJB implements OrderRemoteEJB, OrderLocalEJB {
   public OrderEntity addItem(final Long orderId, final Long bookId, final int quantity)
       throws BookstoreUnknownException {
     OrderEntity order = orderDAO.findOrder(orderId);
+
+    if (order.getIntent() != null) {
+      throw new BookstoreUnknownException("Não é possível adicionar itens à uma ordem registrada.");
+    }
+
     BookEntity book = bookDAO.findBook(bookId);
 
     order.getItems().add(new OrderItemEntity(book, quantity));
@@ -67,6 +72,11 @@ public class OrderEJB implements OrderRemoteEJB, OrderLocalEJB {
   @Override
   public OrderEntity checkout(Long orderId, IntentType intentType) throws BookstoreUnknownException {
     OrderEntity order = orderDAO.findOrder(orderId);
+
+    if (order.getIntent() != null) {
+      throw new BookstoreUnknownException("Não é possível registrar uma ordem já registrada.");
+    }
+
     IntentEntity intent = new IntentEntity(order, intentType);
 
     intentDAO.persist(intent);

@@ -30,7 +30,7 @@ public class IntentEntity implements Serializable {
   private Long id;
 
   /** Corresponding order */
-  @JsonbTransient
+  @JsonbTransient // Needed to avoid infinite loop
   @OneToOne
   private OrderEntity order;
 
