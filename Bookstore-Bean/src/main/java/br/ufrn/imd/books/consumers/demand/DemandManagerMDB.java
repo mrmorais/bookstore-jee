@@ -13,8 +13,8 @@ import br.ufrn.imd.books.entity.BookEntity;
  * 
  * @author Maradona Morais
  */
-@MessageDriven(name="demandQueue", activationConfig = {
-    @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "queue/DEMAND_QUEUE")
+@MessageDriven(activationConfig = {
+    @ActivationConfigProperty(propertyName = "destination", propertyValue = "queue/demandQueue")
     , @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")
     , @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge")
   })
