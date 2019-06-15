@@ -13,7 +13,7 @@ import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
  * BookEJB
  */
 @Stateless(name = "BookEJB")
-public class BookEJB implements BookRemoteEJB, BookLocalEJB {
+public class BookBean implements BookRemoteEJB, BookLocalEJB {
 
   @EJB
   private BookDao bookDAO;

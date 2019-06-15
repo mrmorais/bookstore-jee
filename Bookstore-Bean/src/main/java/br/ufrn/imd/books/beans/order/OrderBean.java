@@ -42,7 +42,7 @@ import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
   }
 )
 @Stateless(name = "OrderEJB")
-public class OrderEJB implements OrderRemoteEJB, OrderLocalEJB {
+public class OrderBean implements OrderRemoteEJB, OrderLocalEJB {
 
   @EJB
   private OrderDao orderDAO;
