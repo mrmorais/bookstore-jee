@@ -3,7 +3,7 @@
   <groupId>br.ufrn.imd.books</groupId>
   <artifactId>Bookstore-Bean</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>ejb</packaging>
+  <packaging>jar</packaging>
   <build>
     <plugins>
       <plugin>
@@ -17,7 +17,7 @@
           <password>admin</password>
         </configuration>
       </plugin>
-      <plugin>
+      <!-- <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-ejb-plugin</artifactId>
         <configuration>
@@ -28,7 +28,7 @@
             <clientExclude>**/*Bean.class</clientExclude>
           </clientExcludes>
         </configuration>
-      </plugin>
+      </plugin> -->
     </plugins>
   </build>
 
@@ -37,6 +37,12 @@
       <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
       <version>8.0</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>jaxrs-api</artifactId>
+      <version>3.0.12.Final</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>

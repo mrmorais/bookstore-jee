@@ -14,7 +14,7 @@ import br.ufrn.imd.books.entity.BookEntity;
  * @author Maradona Morais
  */
 @MessageDriven(activationConfig = {
-    @ActivationConfigProperty(propertyName = "destination", propertyValue = "queue/demandQueue")
+    @ActivationConfigProperty(propertyName = "destination", propertyValue = "java:/queue/demandQueue")
     , @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue")
     , @ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge")
   })
@@ -28,8 +28,7 @@ public class DemandManagerMDB implements MessageListener {
     try {
       bookDao.persist(new BookEntity("Test book", "Test author", "test isbn", 20.0, 15.0));
     } catch(Exception e) {
-
+      e.printStackTrace();
     }
-
   }
 }

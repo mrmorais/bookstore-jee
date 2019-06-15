@@ -23,7 +23,7 @@
       <groupId>br.ufrn.imd.books</groupId>
       <artifactId>Bookstore-Bean</artifactId>
       <version>0.0.1-SNAPSHOT</version>
-      <type>ejb-client</type>
+      <type>ejb</type>
     </dependency>
     <dependency>
       <groupId>org.jboss.resteasy</groupId>
