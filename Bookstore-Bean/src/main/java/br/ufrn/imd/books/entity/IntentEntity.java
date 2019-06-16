@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 
@@ -36,6 +37,10 @@ public class IntentEntity implements Serializable {
 
   /** Intent type */
   private IntentType type;
+
+  /** Intent customer */
+  @ManyToOne
+  private CustomerEntity customer;
 
   /** Empty constructor  */
   public IntentEntity() {
@@ -72,5 +77,13 @@ public class IntentEntity implements Serializable {
 
   public void setType(IntentType type) {
     this.type = type;
+  }
+
+  public CustomerEntity getCustomer() {
+    return this.customer;
+  }
+
+  public void setCustomer(CustomerEntity customer) {
+    this.customer = customer;
   }
 }

@@ -20,7 +20,6 @@ import javax.persistence.OneToMany;
  */
 @Entity(name="demand")
 @NamedQuery(name="getAllDemands", query="SELECT o FROM demand o")
-@NamedQuery(name="getOpenDemand", query="SELECT o FROM demand o WHERE status = 0")
 public class DemandEntity implements Serializable {
 
   private static final long serialVersionUID = -945534620253236926L;

@@ -25,7 +25,7 @@ import br.ufrn.imd.books.utils.ExceptionWrapper;
 public class BookService {
 
   @EJB
-  BookLocalEJB bookEJB;
+  private BookLocalEJB bookEJB;
 
 	/**
 	 * Create a new book
@@ -41,7 +41,7 @@ public class BookService {
 	@Produces("application/json; charset=UTF-8")
 	@Consumes("application/x-www-form-urlencoded; charset=UTF-8")
 	public Response create(
-		@FormParam("title") final String title_
+		  @FormParam("title") final String title_
 		, @FormParam("authorName") final String authorName_
 		, @FormParam("isbn") final String isbn_
 		, @FormParam("sellPrice") final Double sellPrice_

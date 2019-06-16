@@ -37,14 +37,10 @@ public class BookDaoBean implements BookDao {
 
   @Override
   public BookEntity findBook(Long bookId) throws BookstoreUnknownException {
-    try {
-      BookEntity book = entityManager.find(BookEntity.class, bookId);
-      if (book == null) {
-        throw new BookstoreUnknownException("Livro não localizado.");
-      }
-      return book;
-    } catch (Exception e){
-      throw new BookstoreUnknownException();
+    BookEntity book = entityManager.find(BookEntity.class, bookId);
+    if (book == null) {
+      throw new BookstoreUnknownException("Livro não localizado.");
     }
+    return book;
   }
 }

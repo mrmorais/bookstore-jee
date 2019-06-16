@@ -88,6 +88,28 @@ public class OrderBean implements OrderRemoteEJB, OrderLocalEJB {
     return order;
   }
 
+  private void sendIntentToDemandQueue(final Long intentId) throws BookstoreUnknownException {
+    try {
+      Context context = new InitialContext();
+
+      Queue demandQueue = (Queue) context.lookup("java:/queue/demandQueue");
+      QueueConnectionFactory connectionFactory = (QueueConnectionFactory) context.lookup("java:/ConnectionFactory");
+
+      QueueConnection connection = connectionFactory.createQueueConnection();
+      QueueSession sendSession = connection.createQueueSession(false, QueueSession.AUTO_ACKNOWLEDGE);
+
+      MessageProducer producer = sendSession.createProducer(demandQueue);
+      Message msg = sendSession.createObjectMessage();
+      msg.setLongProperty("intentId", intentId);
+      producer.send(msg);
+
+      sendSession.close();
+      connection.close();
+    } catch(Exception exception) {
+      throw new BookstoreUnknownException("Não foi possível registrar intent");
+    }
+  }
+
   @Override
   public OrderEntity checkout(Long orderId, IntentType intentType) throws BookstoreUnknownException {
     OrderEntity order = orderDAO.findOrder(orderId);
@@ -100,24 +122,13 @@ public class OrderBean implements OrderRemoteEJB, OrderLocalEJB {
     intentDAO.persist(intent);
     order.setIntent(intent);
 
-    try {
-      Context context = new InitialContext();
-
-      Queue demandQueue = (Queue) context.lookup("java:/queue/demandQueue");
-      QueueConnectionFactory connectionFactory = (QueueConnectionFactory) context.lookup("java:/ConnectionFactory");
-
-      QueueConnection connection = connectionFactory.createQueueConnection();
-      QueueSession sendSession = connection.createQueueSession(false, QueueSession.AUTO_ACKNOWLEDGE);
-
-      MessageProducer producer = sendSession.createProducer(demandQueue);
-      Message msg = sendSession.createObjectMessage();
-      msg.setLongProperty("intentId", intent.getId());
-      producer.send(msg);
-
-      sendSession.close();
-      connection.close();
-    } catch(Exception exception) {
-      throw new BookstoreUnknownException("Não foi possível registrar intent");
+    switch (intentType) {
+      case RESERVATION:
+        sendIntentToDemandQueue(intent.getId());
+        break;
+      case TRANSACTION:
+        // TODO: Create a Process Intent queue 
+        break;
     }
 
     return order;
