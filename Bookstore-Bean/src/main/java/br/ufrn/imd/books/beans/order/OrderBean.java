@@ -2,13 +2,8 @@ package br.ufrn.imd.books.beans.order;
 
 import java.util.ArrayList;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.JMSContext;
 import javax.jms.JMSDestinationDefinition;
 import javax.jms.JMSDestinationDefinitions;
 import javax.jms.Message;
@@ -17,7 +12,6 @@ import javax.jms.Queue;
 import javax.jms.QueueConnection;
 import javax.jms.QueueConnectionFactory;
 import javax.jms.QueueSession;
-import javax.jms.Session;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
@@ -56,12 +50,6 @@ public class OrderBean implements OrderRemoteEJB, OrderLocalEJB {
 
   @EJB
   private IntentDao intentDAO;
-
-  // @Resource(lookup = "java:/queue/DEMAND_QUEUE")
-  // private QueueConnectionFactory connectionFactory;
-
-  // @Resource
-  // private ConnectionFactory connectionFactory;
 
   /**
    * Creates a new empty book order
@@ -112,21 +100,6 @@ public class OrderBean implements OrderRemoteEJB, OrderLocalEJB {
     intentDAO.persist(intent);
     order.setIntent(intent);
 
-    // After created the intent goes to "intentQueue" to
-    // be processed by DemandManagerMDB
-    // try {
-    //   Connection connection = connectionFactory.createConnection();
-    //   Session session = connection.createSession(true, 0);
-
-    //   MessageProducer producer = session.createProducer(demandQueue);
-    //   Message msg = session.createMessage();
-    //   msg.setLongProperty("intentId", intent.getId());
-    //   producer.send(msg);
-
-    //   connection.close();
-    // } catch(Exception e) {
-    //   throw new BookstoreUnknownException("Erro ao registrar intent");
-    // }
     try {
       Context context = new InitialContext();
 
@@ -138,13 +111,13 @@ public class OrderBean implements OrderRemoteEJB, OrderLocalEJB {
 
       MessageProducer producer = sendSession.createProducer(demandQueue);
       Message msg = sendSession.createObjectMessage();
-      msg.setStringProperty("key", "Maradona");
+      msg.setLongProperty("intentId", intent.getId());
       producer.send(msg);
 
       sendSession.close();
       connection.close();
     } catch(Exception exception) {
-      throw new BookstoreUnknownException(exception.getMessage());
+      throw new BookstoreUnknownException("Não foi possível registrar intent");
     }
 
     return order;

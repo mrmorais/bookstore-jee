@@ -1,12 +1,15 @@
 package br.ufrn.imd.books.consumers.demand;
 
 import javax.ejb.EJB;
+
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import br.ufrn.imd.books.data.BookDao;
-import br.ufrn.imd.books.entity.BookEntity;
+
+import br.ufrn.imd.books.beans.demand.DemandLocalEJB;
+import br.ufrn.imd.books.entity.DemandEntity;
+import br.ufrn.imd.books.entity.DemandEntity.DemandStatus;
 
 /**
  * DemandMDB
@@ -21,12 +24,22 @@ import br.ufrn.imd.books.entity.BookEntity;
 public class DemandManagerMDB implements MessageListener {
 
   @EJB
-  private BookDao bookDao;
+  private DemandLocalEJB demandEJB;
 
   @Override
   public void onMessage(Message message) {
+    // Recieves a "intentId" to be attached
     try {
-      bookDao.persist(new BookEntity("Test book", "Test author", "test isbn", 20.0, 15.0));
+      Long intentId = message.getLongProperty("intentId");
+      DemandEntity openDemand = demandEJB.getOpenDemand();
+
+      if (openDemand == null) {
+        // If there's no existing open demand create one
+        openDemand = new DemandEntity();
+        openDemand.setStatus(DemandStatus.OPEN);
+        demandEJB.createNew(openDemand);
+      }
+      demandEJB.attachIntentToOpenDemand(intentId);
     } catch(Exception e) {
       e.printStackTrace();
     }

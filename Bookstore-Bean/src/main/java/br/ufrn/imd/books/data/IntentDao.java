@@ -9,4 +9,5 @@ import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
  */
 public interface IntentDao {
   public IntentEntity persist(IntentEntity intent) throws BookstoreUnknownException;
+  public IntentEntity findIntent(final Long intentId) throws BookstoreUnknownException;
 }

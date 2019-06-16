@@ -26,5 +26,14 @@ public class IntentDaoBean implements IntentDao {
     }
   }
 
+  @Override
+  public IntentEntity findIntent(Long intentId) throws BookstoreUnknownException {
+    IntentEntity intent = entityManager.find(IntentEntity.class, intentId);
+    if (intent == null) {
+      throw new BookstoreUnknownException("Não foi possível localizar a Intent");
+    }
+    return intent;
+  }
+
   
 }
