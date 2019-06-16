@@ -1,5 +1,6 @@
 package br.ufrn.imd.books.entity;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,7 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Transient;
 
+import br.ufrn.imd.books.entity.RegistryEntity.RegistryType;
 import br.ufrn.imd.books.exceptions.BookstoreValidationException;
 
 import java.io.Serializable;
@@ -37,6 +40,7 @@ public class BookEntity implements Serializable {
    */
   @OneToMany(cascade=CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
   @JoinColumn(name="book_id")
+  @JsonbTransient // Don't show this result
   private Set<RegistryEntity> registries;
 
   /**
@@ -113,6 +117,30 @@ public class BookEntity implements Serializable {
 
   public Set<RegistryEntity> getRegistries() {
     return this.registries;
+  }
+
+  private int calculateTotalQuantity(Set<RegistryEntity> registries) {
+    int totalIn = registries.stream()
+      .filter(r -> r.getType() == RegistryType.IN)
+      .mapToInt(RegistryEntity::getQuantity)
+      .sum();
+    int totalOut = registries.stream()
+      .filter(r -> r.getType() == RegistryType.OUT)
+      .mapToInt(RegistryEntity::getQuantity)
+      .sum();
+    return totalIn - totalOut;
+  }
+
+  private int calculateAvailableQuantity(Set<RegistryEntity> registries) {
+    int availableIn = registries.stream()
+      .filter(r -> (r.getType() == RegistryType.IN && r.getVisible()))
+      .mapToInt(RegistryEntity::getQuantity)
+      .sum();
+    int availableOut = registries.stream()
+      .filter(r -> (r.getType() == RegistryType.OUT && r.getVisible()))
+      .mapToInt(RegistryEntity::getQuantity)
+      .sum();
+    return availableIn - availableOut;
   }
 
   public void setRegistries(Set<RegistryEntity> registries) {
@@ -201,5 +229,13 @@ public class BookEntity implements Serializable {
     */
   public void setSellPrice(final Double sellPrice) {
     this.sellPrice = sellPrice;
+  }
+
+  public int getTotalQuantity() {
+    return calculateTotalQuantity(this.registries);
+  }
+
+  public int getAvailableQuantity() {
+    return calculateAvailableQuantity(this.registries);
   }
 }
