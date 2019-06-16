@@ -1,15 +1,20 @@
 package br.ufrn.imd.books.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
 import br.ufrn.imd.books.exceptions.BookstoreValidationException;
 
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity(name="book")
 @NamedQuery(name= "getAllBooks", query="SELECT b FROM book b")
@@ -26,6 +31,13 @@ public class BookEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = SEQ_BOOK)
   @SequenceGenerator(name = SEQ_BOOK, sequenceName = "seq_book", allocationSize = 1)
   private Long id;
+
+  /**
+   * Book registries
+   */
+  @OneToMany(cascade=CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
+  @JoinColumn(name="book_id")
+  private Set<RegistryEntity> registries;
 
   /**
    * Book title
@@ -97,6 +109,14 @@ public class BookEntity implements Serializable {
     if (this.sellPrice == null) {
       throw new BookstoreValidationException("Informe o preço de venda");
     }
+  }
+
+  public Set<RegistryEntity> getRegistries() {
+    return this.registries;
+  }
+
+  public void setRegistries(Set<RegistryEntity> registries) {
+    this.registries = registries;
   }
 
   /**

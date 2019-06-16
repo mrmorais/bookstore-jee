@@ -12,5 +12,6 @@ import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
 public interface DemandDao {
   public DemandEntity persist(DemandEntity demand) throws BookstoreUnknownException;
   public DemandEntity getOpenDemand();
+  public DemandEntity findDemand(final Long demandId) throws BookstoreUnknownException;
   public List<DemandEntity> getAllDemands() throws BookstoreUnknownException;
 }

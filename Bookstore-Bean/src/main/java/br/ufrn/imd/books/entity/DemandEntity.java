@@ -1,8 +1,7 @@
 package br.ufrn.imd.books.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -39,12 +38,10 @@ public class DemandEntity implements Serializable {
   /** Intents list */
   @OneToMany(cascade=CascadeType.ALL, orphanRemoval=true, fetch=FetchType.EAGER)
   @JoinColumn(name="demand_id")
-  private List<IntentEntity> intents;
+  private Set<IntentEntity> intents;
 
   /** Empty constructor */
-  public DemandEntity() {
-    this.intents = new ArrayList<IntentEntity>();
-  }
+  public DemandEntity() {}
 
   // @@@@ POJO methods @@@@
 
@@ -84,7 +81,7 @@ public class DemandEntity implements Serializable {
    * get demand intents
    * @return intents
    */
-  public List<IntentEntity> getIntents() {
+  public Set<IntentEntity> getIntents() {
     return this.intents;
   }
 
@@ -92,7 +89,7 @@ public class DemandEntity implements Serializable {
    * set demand intents
    * @param intents intents to set
    */
-  public void setIntents(List<IntentEntity> intents) {
+  public void setIntents(Set<IntentEntity> intents) {
     this.intents = intents;
   }
 }

@@ -7,6 +7,7 @@ import javax.ejb.Stateless;
 
 import br.ufrn.imd.books.data.BookDao;
 import br.ufrn.imd.books.entity.BookEntity;
+import br.ufrn.imd.books.entity.RegistryEntity;
 import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
 
 /**
@@ -26,5 +27,16 @@ public class BookBean implements BookRemoteEJB, BookLocalEJB {
   @Override
   public List<BookEntity> getAll() throws BookstoreUnknownException {
     return bookDAO.getAll();
+  }
+
+  @Override
+  public BookEntity addRegistry(Long bookId, RegistryEntity registry) throws BookstoreUnknownException {
+    try {
+      BookEntity book = bookDAO.findBook(bookId);
+      book.getRegistries().add(registry);
+      return bookDAO.persist(book);
+    } catch(Exception e) {
+      throw new BookstoreUnknownException();
+    }
   }
 }

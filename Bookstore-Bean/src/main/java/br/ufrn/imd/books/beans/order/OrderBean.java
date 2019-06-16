@@ -4,16 +4,6 @@ import java.util.ArrayList;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.jms.JMSDestinationDefinition;
-import javax.jms.JMSDestinationDefinitions;
-import javax.jms.Message;
-import javax.jms.MessageProducer;
-import javax.jms.Queue;
-import javax.jms.QueueConnection;
-import javax.jms.QueueConnectionFactory;
-import javax.jms.QueueSession;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 
 import br.ufrn.imd.books.data.BookDao;
 import br.ufrn.imd.books.data.CustomerDao;
@@ -26,21 +16,13 @@ import br.ufrn.imd.books.entity.IntentEntity.IntentType;
 import br.ufrn.imd.books.entity.OrderEntity;
 import br.ufrn.imd.books.entity.OrderItemEntity;
 import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
+import br.ufrn.imd.books.producers.demand.DemandQueueProducer;
 
 /**
  * OrderEJB
  * 
  * @author Maradona Morais
  */
-@JMSDestinationDefinitions(
-  value={
-    @JMSDestinationDefinition(
-        name = "java:/queue/demandQueue",
-        interfaceName = "javax.jms.Queue",
-        destinationName = "demandQueue"
-    ),
-  }
-)
 @Stateless(name = "OrderEJB")
 public class OrderBean implements OrderRemoteEJB, OrderLocalEJB {
 
@@ -55,6 +37,9 @@ public class OrderBean implements OrderRemoteEJB, OrderLocalEJB {
 
   @EJB
   private CustomerDao customerDAO;
+
+  @EJB
+  private DemandQueueProducer demandQueueProducer;
 
   /**
    * Creates a new empty book order
@@ -93,28 +78,6 @@ public class OrderBean implements OrderRemoteEJB, OrderLocalEJB {
     return order;
   }
 
-  private void sendIntentToDemandQueue(final Long intentId) throws BookstoreUnknownException {
-    try {
-      Context context = new InitialContext();
-
-      Queue demandQueue = (Queue) context.lookup("java:/queue/demandQueue");
-      QueueConnectionFactory connectionFactory = (QueueConnectionFactory) context.lookup("java:/ConnectionFactory");
-
-      QueueConnection connection = connectionFactory.createQueueConnection();
-      QueueSession sendSession = connection.createQueueSession(false, QueueSession.AUTO_ACKNOWLEDGE);
-
-      MessageProducer producer = sendSession.createProducer(demandQueue);
-      Message msg = sendSession.createObjectMessage();
-      msg.setLongProperty("intentId", intentId);
-      producer.send(msg);
-
-      sendSession.close();
-      connection.close();
-    } catch(Exception exception) {
-      throw new BookstoreUnknownException("Não foi possível registrar intent");
-    }
-  }
-
   @Override
   public OrderEntity checkout(Long orderId, Long customerId, IntentType intentType) throws BookstoreUnknownException {
     OrderEntity order = orderDAO.findOrder(orderId);
@@ -138,7 +101,7 @@ public class OrderBean implements OrderRemoteEJB, OrderLocalEJB {
 
     switch (intentType) {
       case RESERVATION:
-        sendIntentToDemandQueue(intent.getId());
+        demandQueueProducer.sendIntentToDemandQueue(intent.getId());
         break;
       case TRANSACTION:
         // TODO: Create a Process Intent queue 

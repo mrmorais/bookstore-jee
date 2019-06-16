@@ -52,5 +52,14 @@ public class DemandDaoBean implements DemandDao {
     }
   }
 
+  @Override
+  public DemandEntity findDemand(Long demandId) throws BookstoreUnknownException {
+    DemandEntity demand = entityManager.find(DemandEntity.class, demandId);
+    if (demand == null) {
+      throw new BookstoreUnknownException("Demanda não localizada.");
+    }
+    return demand;
+  }
+
   
 }

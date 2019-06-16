@@ -9,10 +9,13 @@ import br.ufrn.imd.books.data.DemandDao;
 import br.ufrn.imd.books.data.IntentDao;
 import br.ufrn.imd.books.entity.DemandEntity;
 import br.ufrn.imd.books.entity.IntentEntity;
+import br.ufrn.imd.books.entity.DemandEntity.DemandStatus;
 import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
+import br.ufrn.imd.books.producers.intent.IntentQueueProducer;
 
 /**
  * DemandBean
+ * @author Maradona Morais
  */
 @Stateless
 public class DemandBean implements DemandLocalEJB, DemandRemoteEJB {
@@ -22,6 +25,9 @@ public class DemandBean implements DemandLocalEJB, DemandRemoteEJB {
 
   @EJB
   IntentDao intentDAO;
+
+  @EJB
+  IntentQueueProducer intentQueueProducer;
 
   @Override
   public DemandEntity createNew(DemandEntity demand) throws BookstoreUnknownException {
@@ -62,6 +68,15 @@ public class DemandBean implements DemandLocalEJB, DemandRemoteEJB {
       openDemand.setStatus(DemandEntity.DemandStatus.SENT);
       getOpenDemand(); // Call it again to create the new open demand
     }
+  }
+
+  @Override
+  public void consolidateDemand(Long demandId) throws BookstoreUnknownException {
+    DemandEntity demand = demandDAO.findDemand(demandId);
+    // Unpack intents to Process Intent queue
+    intentQueueProducer.sendIntentSetToProcess(demand.getIntents());
+    demand.setStatus(DemandStatus.CONSOLIDATED);
+    demandDAO.persist(demand);
   }
 
 }
