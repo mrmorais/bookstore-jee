@@ -89,7 +89,11 @@ public class OrderService {
   @POST
   @Produces("application/json; charset=UTF-8")
   @Consumes("application/x-www-form-urlencoded; charset=UTF-8")
-  public Response checkout(final @PathParam("id") Long id, final @FormParam("type") String type) {
+  public Response checkout(
+      final @PathParam("id") Long id
+    , final @FormParam("customerId") Long customerId
+    , final @FormParam("type") String type
+  ) {
     try {
       IntentType intentType;
       switch(type) {
@@ -110,7 +114,7 @@ public class OrderService {
         )).build();
       }
 
-      OrderEntity obj = orderEJB.checkout(id, intentType);
+      OrderEntity obj = orderEJB.checkout(id, customerId, intentType);
 
       return Response.ok(obj).build();
     } catch(BookstoreUnknownException unknownException) {

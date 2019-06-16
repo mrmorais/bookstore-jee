@@ -48,9 +48,14 @@ public class IntentEntity implements Serializable {
   }
 
   /** Constructor */
-  public IntentEntity(final OrderEntity order_, final IntentType intentType_) {
-    this.order = order_;
-    this.type = intentType_;
+  public IntentEntity(
+      final OrderEntity order
+    , final CustomerEntity customer
+    , final IntentType intentType
+  ) {
+    this.order = order;
+    this.customer = customer;
+    this.type = intentType;
   }
 
   // @@@@ POJO methods @@@@

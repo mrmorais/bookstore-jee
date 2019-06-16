@@ -16,9 +16,11 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 
 import br.ufrn.imd.books.data.BookDao;
+import br.ufrn.imd.books.data.CustomerDao;
 import br.ufrn.imd.books.data.IntentDao;
 import br.ufrn.imd.books.data.OrderDao;
 import br.ufrn.imd.books.entity.BookEntity;
+import br.ufrn.imd.books.entity.CustomerEntity;
 import br.ufrn.imd.books.entity.IntentEntity;
 import br.ufrn.imd.books.entity.IntentEntity.IntentType;
 import br.ufrn.imd.books.entity.OrderEntity;
@@ -50,6 +52,9 @@ public class OrderBean implements OrderRemoteEJB, OrderLocalEJB {
 
   @EJB
   private IntentDao intentDAO;
+
+  @EJB
+  private CustomerDao customerDAO;
 
   /**
    * Creates a new empty book order
@@ -111,14 +116,23 @@ public class OrderBean implements OrderRemoteEJB, OrderLocalEJB {
   }
 
   @Override
-  public OrderEntity checkout(Long orderId, IntentType intentType) throws BookstoreUnknownException {
+  public OrderEntity checkout(Long orderId, Long customerId, IntentType intentType) throws BookstoreUnknownException {
     OrderEntity order = orderDAO.findOrder(orderId);
 
     if (order.getIntent() != null) {
       throw new BookstoreUnknownException("Não é possível registrar uma ordem já registrada.");
     }
 
-    IntentEntity intent = new IntentEntity(order, intentType);
+    CustomerEntity customer = null;
+    if (customerId != null) {
+      try {
+        customer = customerDAO.findCustomer(customerId);
+      } catch(Exception e) {
+        customer = null;
+      }
+    }
+
+    IntentEntity intent = new IntentEntity(order, customer, intentType);
     intentDAO.persist(intent);
     order.setIntent(intent);
 
