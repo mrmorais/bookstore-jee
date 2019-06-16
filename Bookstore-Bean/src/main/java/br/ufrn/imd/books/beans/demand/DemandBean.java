@@ -30,7 +30,7 @@ public class DemandBean implements DemandLocalEJB, DemandRemoteEJB {
 
   @Override
   public DemandEntity attachIntentToOpenDemand(Long intentId) throws BookstoreUnknownException {
-    DemandEntity openDemand = demandDAO.getOpenDemand();
+    DemandEntity openDemand = getOpenDemand();
     IntentEntity intentToAttach = intentDAO.findIntent(intentId);
 
     openDemand.getIntents().add(intentToAttach);
@@ -44,8 +44,24 @@ public class DemandBean implements DemandLocalEJB, DemandRemoteEJB {
   }
 
   @Override
-  public DemandEntity getOpenDemand() {
-    return demandDAO.getOpenDemand();
+  public DemandEntity getOpenDemand() throws BookstoreUnknownException {
+    DemandEntity openDemand = demandDAO.getOpenDemand();
+    if (openDemand == null) {
+      // If there's no existing open demand create one
+      openDemand = new DemandEntity();
+      openDemand.setStatus(DemandEntity.DemandStatus.OPEN);
+      openDemand = createNew(openDemand);
+    }
+    return openDemand;
+  }
+
+  @Override
+  public void sendDemand() throws BookstoreUnknownException {
+    DemandEntity openDemand = getOpenDemand();
+    if(openDemand.getIntents().size() > 0) {
+      openDemand.setStatus(DemandEntity.DemandStatus.SENT);
+      getOpenDemand(); // Call it again to create the new open demand
+    }
   }
 
 }

@@ -35,7 +35,7 @@ public class DemandDaoBean implements DemandDao {
   public DemandEntity getOpenDemand() {
     try {
       TypedQuery<DemandEntity> query = entityManager
-        .createNamedQuery("getOpenDemand", DemandEntity.class).setMaxResults(1);
+        .createQuery("FROM demand WHERE status = 0", DemandEntity.class);
       return query.getResultList().get(0);
     } catch(Exception e) {
       return null;
