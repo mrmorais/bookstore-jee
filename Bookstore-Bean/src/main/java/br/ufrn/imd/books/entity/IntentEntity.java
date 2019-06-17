@@ -44,6 +44,10 @@ public class IntentEntity implements Serializable {
   @ManyToOne
   private CustomerEntity customer;
 
+  /** Intent sell order */
+  @OneToOne
+  private SellOrderEntity sellOrder;
+
   /** Empty constructor  */
   public IntentEntity() {
     // Intentionally left empty
@@ -92,5 +96,13 @@ public class IntentEntity implements Serializable {
 
   public void setCustomer(CustomerEntity customer) {
     this.customer = customer;
+  }
+
+  public SellOrderEntity getSellOrder() {
+    return this.sellOrder;
+  }
+
+  public void setSellOrder(SellOrderEntity sellOrder) {
+    this.sellOrder = sellOrder;
   }
 }

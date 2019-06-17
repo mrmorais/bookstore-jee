@@ -12,7 +12,9 @@ import br.ufrn.imd.books.entity.BookEntity;
 import br.ufrn.imd.books.entity.IntentEntity;
 import br.ufrn.imd.books.entity.OrderItemEntity;
 import br.ufrn.imd.books.entity.RegistryEntity;
+import br.ufrn.imd.books.entity.SellOrderEntity;
 import br.ufrn.imd.books.entity.RegistryEntity.RegistryType;
+import br.ufrn.imd.books.entity.SellOrderEntity.SellOrderType;
 import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
 
 /**
@@ -76,12 +78,20 @@ public class IntentProcessorMDB implements MessageListener {
             }
           } else {
             // has customer? -> create OPEN sell order + Itens Registry IN not visible
+            for (OrderItemEntity orderItem : intent.getOrder().getItems()) {
+              createRegistryForOrderItem(orderItem, RegistryType.IN, false);
+              intentEJB.createSellOrder(intentId, new SellOrderEntity(SellOrderType.OPEN));
+            }
           }
           
           break;
         case TRANSACTION: // Direct sell
           // create CONSOLIDATED sell Order
           // create Itens Registry OUT
+          for (OrderItemEntity orderItem : intent.getOrder().getItems()) {
+            createRegistryForOrderItem(orderItem, RegistryType.OUT, true);
+          }
+          intentEJB.createSellOrder(intentId, new SellOrderEntity(SellOrderType.CONSOLIDATED));
           break;
       }
     } catch(Exception e) {

@@ -231,10 +231,12 @@ public class BookEntity implements Serializable {
   }
 
   public int getTotalQuantity() {
+    if (this.registries == null) return 0;
     return calculateTotalQuantity(this.registries);
   }
 
   public int getAvailableQuantity() {
+    if (this.registries == null) return 0;
     return calculateAvailableQuantity(this.registries);
   }
 }

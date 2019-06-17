@@ -1,6 +1,8 @@
 package br.ufrn.imd.books.beans.order;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -17,6 +19,7 @@ import br.ufrn.imd.books.entity.OrderEntity;
 import br.ufrn.imd.books.entity.OrderItemEntity;
 import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
 import br.ufrn.imd.books.producers.demand.DemandQueueProducer;
+import br.ufrn.imd.books.producers.intent.IntentQueueProducer;
 
 /**
  * OrderEJB
@@ -40,6 +43,9 @@ public class OrderBean implements OrderRemoteEJB, OrderLocalEJB {
 
   @EJB
   private DemandQueueProducer demandQueueProducer;
+
+  @EJB
+  private IntentQueueProducer intentQueueProducer;
 
   /**
    * Creates a new empty book order
@@ -102,7 +108,7 @@ public class OrderBean implements OrderRemoteEJB, OrderLocalEJB {
         demandQueueProducer.sendIntentToDemandQueue(intent.getId());
         break;
       case TRANSACTION:
-        // TODO: Create a Process Intent queue 
+        intentQueueProducer.sendIntentToProcess(intent);
         break;
     }
 

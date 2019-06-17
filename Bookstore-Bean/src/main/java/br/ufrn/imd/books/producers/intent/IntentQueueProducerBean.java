@@ -32,7 +32,7 @@ import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
 @Stateless
 public class IntentQueueProducerBean implements IntentQueueProducer {
 
-  private void sendIntentToProcessQueue(final Long intentId, QueueSession session, Queue queue) throws Exception {
+  private void sendIntent(final Long intentId, QueueSession session, Queue queue) throws Exception {
       MessageProducer producer = session.createProducer(queue);
       Message msg = session.createObjectMessage();
       msg.setLongProperty("intentId", intentId);
@@ -51,13 +51,33 @@ public class IntentQueueProducerBean implements IntentQueueProducer {
       QueueSession sendSession = connection.createQueueSession(false, QueueSession.AUTO_ACKNOWLEDGE);
 
       for (IntentEntity intent : intents) {
-        sendIntentToProcessQueue(intent.getId(), sendSession, intentProcessQueue);
+        sendIntent(intent.getId(), sendSession, intentProcessQueue);
       }
 
       sendSession.close();
       connection.close();
     } catch(Exception exception) {
-      throw new BookstoreUnknownException("Não foi possível processar intent");
+      throw new BookstoreUnknownException("Não foi possível processar os intents");
+    }
+  }
+
+  @Override
+  public void sendIntentToProcess(IntentEntity intent) throws BookstoreUnknownException {
+    try {
+      Context context = new InitialContext();
+
+      Queue intentProcessQueue = (Queue) context.lookup("java:/queue/intentProcessQueue");
+      QueueConnectionFactory connectionFactory = (QueueConnectionFactory) context.lookup("java:/ConnectionFactory");
+
+      QueueConnection connection = connectionFactory.createQueueConnection();
+      QueueSession sendSession = connection.createQueueSession(false, QueueSession.AUTO_ACKNOWLEDGE);
+
+      sendIntent(intent.getId(), sendSession, intentProcessQueue);
+
+      sendSession.close();
+      connection.close();
+    } catch(Exception e) {
+      throw new BookstoreUnknownException("Não foi possivel processar um intent");
     }
   }
 

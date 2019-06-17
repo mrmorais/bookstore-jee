@@ -1,10 +1,8 @@
 package br.ufrn.imd.books.data;
 
-import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.UserTransaction;
 
 import br.ufrn.imd.books.entity.OrderEntity;
 import br.ufrn.imd.books.entity.OrderItemEntity;

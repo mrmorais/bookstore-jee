@@ -10,4 +10,5 @@ import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
  */
 public interface IntentQueueProducer {
   public void sendIntentSetToProcess(Set<IntentEntity> intents) throws BookstoreUnknownException;
+  public void sendIntentToProcess(IntentEntity intent) throws BookstoreUnknownException;
 }
