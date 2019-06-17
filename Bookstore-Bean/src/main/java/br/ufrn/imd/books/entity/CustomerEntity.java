@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 
 /**
  * CustomerEntity
@@ -18,7 +19,8 @@ public class CustomerEntity implements Serializable {
   private static final long serialVersionUID = 1165323977556358668L;
 
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_CUSTOMER")
+  @SequenceGenerator(name="SEQ_CUSTOMER", sequenceName="seq_customer", allocationSize=1)
   /** primary key */
   private Long id;
 

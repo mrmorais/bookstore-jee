@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 
 /**
  * OrderEntity
@@ -27,7 +29,8 @@ public class OrderEntity implements Serializable {
 
   /** Primary key */
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="SEQ_ORDER")
+  @SequenceGenerator(name="SEQ_ORDER", sequenceName="seq_order", allocationSize=1)
   private Long id;
 
   /** Order creation date */
@@ -35,20 +38,17 @@ public class OrderEntity implements Serializable {
 
   @OneToMany(cascade=CascadeType.ALL, orphanRemoval= true, fetch=FetchType.EAGER)
   @JoinColumn(name="book_order_id")
-  private List<OrderItemEntity> items;
+  private Set<OrderItemEntity> items;
 
   @OneToOne(mappedBy="order")
   private IntentEntity intent;
 
   /** Empty constructor */
-  public OrderEntity() {
-    this.items = new ArrayList<OrderItemEntity>();
-  }
+  public OrderEntity() { }
 
   /** Constructor */
   public OrderEntity(final Date createdAt) {
     this.createdAt = createdAt;
-    this.items = new ArrayList<OrderItemEntity>();
   }
 
   // @@@@ POJO methods @@@@
@@ -84,14 +84,14 @@ public class OrderEntity implements Serializable {
   /**
    * @return order items
    */
-  public List<OrderItemEntity> getItems() {
+  public Set<OrderItemEntity> getItems() {
     return this.items;
   }
 
   /**
    * @param items items to set
    */
-  public void setItems(List<OrderItemEntity> items) {
+  public void setItems(Set<OrderItemEntity> items) {
     this.items = items;
   }
 

@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 /**
  * RegistryEntity
@@ -21,7 +22,8 @@ public class RegistryEntity implements Serializable {
   }
 
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_REGISTRY")
+  @SequenceGenerator(name="SEQ_REGISTRY", sequenceName="seq_registry", allocationSize=1)
   /** Primary key */
   private Long id;
 

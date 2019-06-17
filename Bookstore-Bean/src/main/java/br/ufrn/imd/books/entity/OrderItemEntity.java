@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 
 /**
  * OrderItemEntity
@@ -19,7 +20,8 @@ public class OrderItemEntity implements Serializable {
    * Primary key
    */
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_ORDER_ITEM")
+  @SequenceGenerator(name="SEQ_ORDER_ITEM", sequenceName="seq_order_item", allocationSize=1)
   private Long id;
 
   @ManyToOne

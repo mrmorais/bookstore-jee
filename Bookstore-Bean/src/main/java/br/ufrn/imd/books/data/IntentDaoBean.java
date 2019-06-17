@@ -1,8 +1,10 @@
 package br.ufrn.imd.books.data;
 
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.UserTransaction;
 
 import br.ufrn.imd.books.entity.IntentEntity;
 import br.ufrn.imd.books.exceptions.BookstoreUnknownException;
@@ -20,17 +22,18 @@ public class IntentDaoBean implements IntentDao {
   public IntentEntity persist(IntentEntity intent) throws BookstoreUnknownException {
     try {
       entityManager.persist(intent);
-      return intent;
+      entityManager.flush();
     } catch(Exception e) {
       throw new BookstoreUnknownException();
     }
+    return intent;
   }
 
   @Override
   public IntentEntity findIntent(Long intentId) throws BookstoreUnknownException {
     IntentEntity intent = entityManager.find(IntentEntity.class, intentId);
     if (intent == null) {
-      throw new BookstoreUnknownException("Não foi possível localizar a Intent");
+      throw new BookstoreUnknownException("Não foi possível localizar a Intent "+ intentId);
     }
     return intent;
   }

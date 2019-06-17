@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 
 /**
  * DemandEntity
@@ -28,7 +29,8 @@ public class DemandEntity implements Serializable {
   }
 
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_DEMAND")
+  @SequenceGenerator(name="SEQ_DEMAND", sequenceName="seq_demand", allocationSize=1)
   /** Primary key */
   private Long id;
 

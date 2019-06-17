@@ -11,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Transient;
 
 import br.ufrn.imd.books.entity.RegistryEntity.RegistryType;
 import br.ufrn.imd.books.exceptions.BookstoreValidationException;

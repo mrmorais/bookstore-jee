@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 
 /**
  * IntentEntity
@@ -27,7 +28,8 @@ public class IntentEntity implements Serializable {
 
   /** Primary key */
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="SEQ_INTENT")
+  @SequenceGenerator(name="SEQ_INTENT", sequenceName="seq_intent", allocationSize=1)
   private Long id;
 
   /** Corresponding order */

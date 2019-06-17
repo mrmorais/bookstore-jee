@@ -49,8 +49,6 @@ public class OrderBean implements OrderRemoteEJB, OrderLocalEJB {
    */
   @Override
   public OrderEntity createNew(OrderEntity order) throws BookstoreUnknownException {
-    ArrayList<OrderItemEntity> items = new ArrayList<OrderItemEntity>();
-    order.setItems(items);
     return orderDAO.persist(order);
   }
 
