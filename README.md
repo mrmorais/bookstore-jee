@@ -100,6 +100,6 @@ Try redeploy the Bookstore-EJB project. Before it, try remove and create again t
 
 ## Contributors
 
-| <img src="https://projetos.imd.ufrn.br/uploads/-/system/user/avatar/286/avatar.png?width=90" width="90"/> |
+| <img src="https://avatars1.githubusercontent.com/u/8071409?s=96&v=4" width="90"/> |
 |---|
-|[@Morais](https://projetos.imd.ufrn.br/Morais) <br/> Master contributor|
+|[@mrmorais](https://github.com/mrmorais) <br/> Master contributor|
