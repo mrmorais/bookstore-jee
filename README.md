@@ -90,13 +90,19 @@ mvn -f Bookstore-REST wildfly:deploy
 
 If somehow you identified that your code is not going successfully to the container, but you got a BUILD SUCCESS message you can solve it by running a maven clean goal.
 
-**The JNDI got messy**
+**The JNDI get messy**
 
 In that situation try undeploy and deploy it again with the clean command. If still not worked try restart the server (through 9990 HAL console).
 
-**JPA did not created the database correctly**
+**JPA did not create the database correctly**
 
 Try redeploy the Bookstore-EJB project. Before it, try remove and create again the public schema (via 8081 pgAdmin).
+
+## References
+
+- A L Rubinger (<i>et al</i>) "Enterprise JavaBeans 3.1" book, also [book's examples repository](https://github.com/ALRubinger/oreilly-ejb-6thedition-book-examples).
+- Wildfly quickstart [repository](https://github.com/wildfly/quickstart)
+- [JBoss](https://docs.jboss.org/author/display/WFLY10/Admin+Guide) and [Wildfly](http://docs.wildfly.org/) documentation
 
 ## Contributors
 
